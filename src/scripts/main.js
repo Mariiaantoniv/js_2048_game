@@ -209,8 +209,8 @@ function updateMessage(stat) {
   }
 }
 
-document.addEventListener('keydown', (e) => {
-  switch (e.key) {
+document.addEventListener('keydown', (en) => {
+  switch (en.key) {
     case 'ArrowLeft':
       game.moveLeft();
       break;
