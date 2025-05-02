@@ -28,28 +28,45 @@ class Game {
   }
 
   moveLeft() {
+    const oldState = this.state.map((row) => row.slice());
+
     this.state = this.state.map((row) => this.shiftInTheDirection(row));
-    this.addRandomtile();
+
+    if (this.isSatetCahnge(oldState, this.state)) {
+      this.addRandomtile();
+    }
     this.checkGameOver();
   }
 
   moveRight() {
+    const oldState = this.state.map((row) => row.slice());
+
     this.state = this.state.map((row) => {
       return this.shiftInTheDirection(row.reverse()).reverse();
     });
-    this.addRandomtile();
+
+    if (this.isSatetCahnge(oldState, this.state)) {
+      this.addRandomtile();
+    }
     this.checkGameOver();
   }
 
   moveUp() {
+    const oldState = this.state.map((row) => row.slice());
+
     this.transpos();
     this.state = this.state.map((row) => this.shiftInTheDirection(row));
     this.transpos();
-    this.addRandomtile();
+
+    if (this.isSatetCahnge(oldState, this.state)) {
+      this.addRandomtile();
+    }
     this.checkGameOver();
   }
 
   moveDown() {
+    const oldState = this.state.map((row) => row.slice());
+
     this.transpos();
 
     this.state = this.state.map((row) => {
@@ -57,7 +74,10 @@ class Game {
     });
 
     this.transpos();
-    this.addRandomtile();
+
+    if (this.isSatetCahnge(oldState, this.state)) {
+      this.addRandomtile();
+    }
     this.checkGameOver();
   }
 
@@ -75,6 +95,18 @@ class Game {
     this.score = 0;
     this.status = 'ready';
     updateMessage('ready');
+  }
+
+  isSatetCahnge(oldState, newState) {
+    for (let row = 0; row < oldState.length; row++) {
+      for (let coll = 0; coll < oldState[row].length; coll++) {
+        if (oldState[row][coll] !== newState[row][coll]) {
+          return true; // if 1 cell change
+        }
+      }
+    }
+
+    return false; // state not change
   }
 
   addRandomtile() {
@@ -204,7 +236,9 @@ function updateMessage(stat) {
     messageWin.classList.remove('hidden');
     messageColor.style.background = '#cccc00';
     messageColor.style.color = '#ffffcc';
-  } else if (stat === 'ready' || stat === 'playing') {
+  } else if (stat === 'playing') {
+    messageStart.classList.add('hidden');
+  } else if (stat === 'ready') {
     messageStart.classList.remove('hidden');
   }
 }
